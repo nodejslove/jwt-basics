@@ -18,26 +18,12 @@ const login = async (req, res) => {
 };
 
 const dashboard = async (req, res) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    throw new CustomAPIError('No token provide', 401);
-  }
-
-  const token = authHeader.split(' ')[1];
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    res.status(200).json({
-      msg: `Hello ${decoded.username}`,
-      secret: `Here is your authorized data, your lucky number is: ${
-        Math.floor(Math.random() * 100) + 1
-      }`,
-    });
-  } catch (error) {
-    throw new CustomAPIError(
-      `Not authorized to access this route or Token expired. ${error.message}`,
-      401
-    );
-  }
+  res.status(200).json({
+    msg: `Hello ${req.user.username}`,
+    secret: `Here is your authorized data, your lucky number is: ${
+      Math.floor(Math.random() * 100) + 1
+    }`,
+  });
 };
 
 module.exports = {
